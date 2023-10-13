@@ -37,6 +37,7 @@ namespace Gestion_des_etudiants.Controllers
         {
             try
             {
+                ischoolRepository.Add(s);
                 return RedirectToAction(nameof(Index));
             }
             catch
