@@ -1,5 +1,6 @@
 using Gestion_des_etudiants.Models;
 using Gestion_des_etudiants.Models.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -8,6 +9,13 @@ builder.Services.AddDbContextPool<StudentContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("StudentDBConnection")));
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<StudentContext>();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	// Default Password settings.
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequireUppercase = false;
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -26,6 +34,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

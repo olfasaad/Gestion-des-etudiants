@@ -1,10 +1,12 @@
 ﻿using Gestion_des_etudiants.Models;
 using Gestion_des_etudiants.Models.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gestion_des_etudiants.Controllers
 {
+    [Authorize]
     public class SchoolController : Controller
     {
         private ISchoolRepository ischoolRepository;
@@ -13,6 +15,7 @@ namespace Gestion_des_etudiants.Controllers
             this.ischoolRepository = ischoolRepository;
         }
         // GET: SchoolController
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var school = ischoolRepository.GetAll();
@@ -61,6 +64,7 @@ namespace Gestion_des_etudiants.Controllers
         {
             try
             {
+                ViewBag.SchoolName = s.SchoolName;
                 ischoolRepository.Edit( s);
                 return RedirectToAction(nameof(Index));
             }
@@ -74,17 +78,17 @@ namespace Gestion_des_etudiants.Controllers
         public ActionResult Delete(int id)
         {
             var school = ischoolRepository.GetById(id);
-            return View();
+            return RedirectToAction("Index");
         }
 
         // POST: SchoolController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, School s)
         {
             try
             {
-              
+                ischoolRepository.Delete(s);
                 return RedirectToAction(nameof(Index));
             }
             catch

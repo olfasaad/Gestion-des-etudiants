@@ -13,7 +13,8 @@ namespace Gestion_des_etudiants.Models
             [DataType(DataType.Date)]
             public DateTime BirthDate { get; set; }
             public int SchoolID { get; set; }
-            public School School { get; set; }
+       
+        public School School { get; set; }
 
         }
     }
